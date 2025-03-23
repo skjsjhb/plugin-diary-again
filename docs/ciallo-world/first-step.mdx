@@ -1,0 +1,262 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 1-1 你的第一个插件
+
+## 创建一个项目
+
+> 在做了在做了，已经在新建文件夹了！
+
+开发一个插件的过程中要用到很多的文件，包括源代码、配置模板、构建脚本、依赖包，以及很多其它的东西。为了高效地管理它们，而不至于像刚下矿回来的背包那样乱七八糟，我们就需要**创建一个项目**。
+
+现在打开 IntelliJ IDEA（以后我们都简称它为 IDEA），单击 <kbd>New Project</kbd> 按钮，在左侧的项目类型表中选择 <kbd>Kotlin</kbd>（因为我们要创建 Kotlin 项目），并按照图中所示设置项目信息：
+
+![Project Configuration](/img/contents/ciallo-world-1.png)
+
+这里有一些选项需要注意：
+
+- Name（名称）：项目的名称。这里的命名有一些限制，暂时就先填写 `hello-world`。这可以稍后修改，而且在后续的项目中，你完全可以自行给插件取名字。
+- Location（存储位置）：项目代码存放的地方。图中的位置是在笔者的电脑上对应的路径，未必适用于你的情况，这需要你自行选定。一个插件项目占用的空间通常不会很大（约几百 MiB），但以防万一，还是建议选择空间充足的位置。
+- Build System（构建系统）：用于构建项目所用的工具。这里就选择 Gradle，Gradle 是 Java、Scala 和 Kotlin 社区内非常流行的构建工具。
+- JDK：项目所用的 JDK。IDEA 会自动寻找你电脑上的 JDK，只需要单击这个选项，再在下方选择“Eclipse Temurin 21.0.6”或者类似字样的选项就行。**JDK 的版本号非常重要，请务必确保你所选的版本是 21。**
+- Gradle DSL：选择 Kotlin。这个选项决定构建系统本身的脚本使用哪种语言，我们将使用 Kotlin。
+
+其它的选项也都照着图中填写就好。注意下方的 Advanced Settings（高级选项）需要手动展开，并填写其中的表单。当一切都填写完成后，点按“Create”便可创建项目。
+
+项目创建完成后，IDEA 将会打开项目，此时注意到屏幕左下角的一个锤子图标，上方可能还带有一个绿色的小点，轻点以展开它。
+
+![Opened Project](/img/contents/ciallo-world-2.png)
+
+你将注意到屏幕左下角显示的“Sync”字样，这代表 Gradle 正在下载一些项目所需的文件，稍等一会儿，直到它旁边的加载图标停止转动，变为一个绿色的勾，代表 Gradle 已经准备就绪。
+
+*如果经过很长时间（超过 5 分钟），Gradle 都没有完成导入，那么请按下面板左侧的红色停止按钮，并继续完成下面的步骤。*
+
+现在，在左侧的项目文件面板中，展开 `hello-world`，并双击打开其中的 `build.gradle.kts` 文件（IDEA 可能已经自动打开了），你将看到以下内容：
+
+```kotlin
+plugins {
+    kotlin("jvm") version "2.1.10"
+}
+
+group = "com.example"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(kotlin("test"))
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+```
+
+在文件的最后插入以下内容：
+
+```kotlin
+repositories {
+    maven {
+        name = "papermc"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
+}
+
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+}
+```
+
+一旦你做了这个修改，屏幕的右上角就应该出现这样的图标：
+
+![Gradle Refresh Icon](/img/contents/ciallo-world-3.png)
+
+点击一下它，下方 Build 面板中的加载图标会重新开始旋转，请等一会儿，直到它再次停止旋转，并变为一个绿色的勾。
+
+*这可能会需要一点时间，但如果超过 10 分钟那也太过分了，如果是这样，请展开下方的内容查看解决方法。*
+
+<details>
+<summary>我需要帮忙！</summary>
+
+Paper 使用一些额外的文件来辅助插件开发过程，Gradle 会根据我们所做的配置自动下载这些文件，但是由于，嗯，一些原因（恕无法详细说明），有时候下载会失败。这个问题有两种解决方法，一种是使用镜像，另一种则是使用……一些工具。我们两种方法都介绍，但你可以选择适合你情况的那种。
+
+<Tabs>
+    <TabItem value="tools" label="使用代理" default>
+
+:::note 那是黑魔法！
+
+如果你不知道所谓的“代理”是什么，那也不必深究这部分内容，请在上方选择“使用镜像”查看另一种方法。
+
+:::
+
+即使你已经有了所需的工具，Gradle 并不会自动识别系统代理并使用它，你必须明确告诉 Gradle 要让它使用代理。打开项目面板中的 `gradle.properties`，并在后面加上这样几行：
+
+```properties
+systemProp.http.proxyHost=127.0.0.1
+systemProp.http.proxyPort=端口号 
+systemProp.https.proxyHost=127.0.0.1
+systemProp.https.proxyPort=端口号
+```
+
+必须将 `端口号` 替换为代理服务器所使用的 HTTP 端口号，例如 `8888`，这要根据你的代理程序进行设置。做了这样的修改后，请展开屏幕右侧的 Gradle 面板（图标像是一头大象），并点按左上角的 <kbd>Sync All Gradle Projects</kbd>，希望这次一切都顺利。
+
+![Refresh Gradle Project](/img/contents/ciallo-world-4.png)
+
+  </TabItem>
+  <TabItem value="mirrors" label="使用镜像">
+如果没有代理，那事情就比较棘手了，原因是 Paper 1.21.4 所需的文件目前还没有可提供的镜像。也就是说，除了从 Paper 的官方服务器缓慢（甚至无法访问）地下载，我们别无他法……吗？
+
+事实上还是有办法的，我们可以使用一些旧版本的文件。Paper 1.**20**.4 的文件有可用的镜像，我们可以基于 1.20.4 的 Paper 进行构建，然后“声称”我们的插件是基于 1.21.4 的，这样应该能行，嗯，应该能。
+
+*这真不会引发什么问题吗？也许有，因为 1.21 和 1.20 的服务端并不完全相同，但是开发插件所需的大多数功能，在 1.21 和 1.20 中是相同的，也就是说，只要不碰那些“不一样的地方”，Paper 就不会发现我们造假的事实啦（笑）。*
+
+首先打开 `gradle/wrapper/gradle-wrapper.properties`，你应当看到这样的一行：
+
+```properties
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.10-bin.zip
+```
+
+将其修改为：
+
+```properties
+distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-8.10-bin.zip
+```
+
+当你读到这里时，Gradle 也许已经有了更新的版本，那么在修改时，就还保留原来的版本就好。也就是说，如果 URL 最后那部分不是 `8.10`，而是诸如 `8.12` 或者 `9.4` 这样的版本，那保留它就好。另外注意在 `https` 和 `:` 之间有一根反斜线 `\`，不要将其删除了。
+
+现在回到 `build.gradle.kts`，删除掉先前添加的内容：
+
+```kotlin
+repositories {
+    maven {
+        name = "papermc"
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
+}
+
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+}
+```
+
+并添加以下内容：
+
+```kotlin
+repositories {
+    maven("https://maven.aliyun.com/repository/public/")
+    maven("https://crystal.app.lss233.com/repositories/minecraft/")
+}
+
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+}
+```
+
+然后向上翻，找到这样一段：
+
+```kotlin
+repositories {
+    mavenCentral()
+}
+```
+
+并将其删除。
+
+现在，请展开屏幕右侧的 Gradle 面板（图标像是一头大象），并点按左上角的 <kbd>Sync All Gradle Projects</kbd>，希望这次一切都顺利。
+
+![Refresh Gradle Project](/img/contents/ciallo-world-4.png)
+  </TabItem>
+</Tabs>
+
+</details>
+
+不论是简单还是费尽周折，总之只要项目创建成功就好了。
+
+## 添加一些代码
+
+要为插件添加功能，你就需要编写一些代码。在深究到底该如何编写这些代码之前，我们先来了解如何添加这些代码。
+
+首先展开项目面板中的 `src/main/kotlin` 目录（如果没有这个目录，请检查一下刚才的项目导入有没有成功），对着它按一下右键，在菜单中选择 <kbd>New</kbd> <kbd>Kotlin Class/File</kbd>，并在弹出的窗口中键入 `Main`，然后按下 <kbd>Enter</kbd> 确定。
+
+IDEA 将为你创建一个名为 `Main.kt` 的文件，并且已经自动填写了以下内容：
+
+```kotlin
+class Main {
+}
+```
+
+将其中的代码修改成这样（你可以复制粘贴！）：
+
+```kotlin
+class Main : org.bukkit.plugin.java.JavaPlugin() {
+}
+```
+
+IDEA 会自动保存你的文件。
+
+现在右键 `src/main/resources`，选择 <kbd>New</kbd> <kbd>File</kbd>，并键入文件名 `plugin.yml`，在创建好的文件中粘贴以下内容：
+
+```yaml
+name: HelloWorld
+main: Main
+version: 1.0
+api-version: 1.21
+```
+
+现在回到 `build.gradle.kts`，在文件的最后增加下面的内容：
+
+```kotlin
+tasks.jar {
+    from(configurations.runtimeClasspath.get().map { zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+```
+
+这就是第一个插件的全部代码了！事实上我们只是创建了两个新文件，修改了一个已有的文件，并且增加了短短十几行代码，还挺简单，不是吗？虽然你可能还搞不懂这些代码的含义，但那也不要紧，本书的所有剩余内容几乎都是关于“如何编写正确的代码”的。
+
+## 从代码到插件
+
+现在需要**构建**项目，也就是将这些 `.kt` 源代码转换为可用于服务器的 `.jar` 文件。点击右侧的 Gradle 面板（图标类似一头大象），展开 `hello-world/Tasks/build`，并双击 `jar`。
+
+![Build Gradle Project](/img/contents/ciallo-world-5.png)
+
+和导入项目一样，IDEA 会在下方弹出一个面板，并显示一个加载图标，稍等一会儿（不需要太久），直到加载图标消失，变为一个绿色的勾，代表构建完成。
+
+现在，右键 `build.gradle.kts`（或者随便什么其它项目根目录下的文件），并选择 <kbd>Open In</kbd> <kbd>Explorer</kbd>，这会在文件资源管理器中显示项目文件夹。打开 `build/libs` 两层目录，你将能看到一个名为 `hello-world-1.0-SNAPSHOT.jar` 的文件，这就是做好的插件了！
+
+## 在服务器上运行
+
+前往服务器根目录（搭设开发环境时 `paper-1.21.4.jar` 所在的文件夹），将刚才制作的插件文件复制粘贴到服务器根目录的 `plugins` 文件夹中，然后启动服务器。
+
+*如果你已经忘了如何启动服务器，请回到 0-2 一节中再看一遍，并且确保这次要记住了。*
+
+启动服务器后，观察终端或者 Paper 弹出的窗口，如果一切顺利，其中应该出现类似下面的几行（可能分散在不同地方）：
+
+```log
+[10:38:08 INFO]: [PluginInitializerManager] Bukkit plugins (1):
+ - HelloWorld (1.0)
+
+...
+
+[10:38:08 INFO]: [HelloWorld] Loading server plugin HelloWorld v1.0
+
+...
+
+[10:38:08 INFO]: [HelloWorld] Enabling HelloWorld v1.0
+```
+
+我们的插件名叫 HelloWorld，如果你看到这些内容，就代表 Paper 已经识别到了插件，并且正确加载。
+
+---
+
+这样，我们的第一个插件就完工啦！虽然大家可能还完全没搞清楚刚才那些代码的含义，只是稀里糊涂地复制粘贴了一堆东西，然后插件就在 Paper 的日志中显示出来了。不过没关系，接下来的几个小节，我们会介绍刚才都做了些什么。
