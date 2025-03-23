@@ -60,7 +60,7 @@ class Main : org.bukkit.plugin.java.JavaPlugin() {
 下面就来添加一个真正有用的功能吧！我们来让服务器启动时自动关闭（笑）。向 `onEnable` 中添加如下代码：
 
 ```kotlin
-Bukkit.getServer().shutdown()
+org.bukkit.Bukkit.getServer().shutdown()
 ```
 
 最终的代码会变成这样：

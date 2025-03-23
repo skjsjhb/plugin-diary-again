@@ -37,6 +37,15 @@
   color: #e32964;
 }
 
+[data-theme='dark'] blockquote strong {
+  color: #aaa;
+}
+
+[data-theme='light'] blockquote strong {
+  color: #444;
+}
+
+
 .alert a {
   color: var(--ifm-color-primary);
   text-decoration-color: #00000000;

@@ -96,7 +96,7 @@ brew install --cask temurin21
 
 安装完成后，打开操作系统的**终端**。终端就是**输入命令的地方**，在 Minecraft 里，要输入命令，需要按一下斜线 <kbd>/</kbd> 按键。而在操作系统中，打开的方式各有不同：
 
-- Windows：按下 <kbd>⊞ Win</kbd> + <kbd>R</kbd>（<kbd>⊞ Win</kbd> 键在左侧 <kbd>Alt</kbd> 键的左边），在弹出的窗口输入 `cmd`，并按下 <kbd>Enter</kbd> 键（或单击”确定“）。
+- Windows：按下 <kbd>⊞ Win</kbd> + <kbd>R</kbd>（<kbd>⊞ Win</kbd> 键在左侧 <kbd>Alt</kbd> 键的左边），在弹出的窗口输入 `cmd`，并按下 <kbd>Enter</kbd> 键（或单击“确定”）。
 - macOS：点选“启动台”，在应用列表中寻找“终端”并打开。
 - GNU/Linux：通常是 <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>，取决于你的发行版。
 

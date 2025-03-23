@@ -9,14 +9,14 @@ sidebar_position: 2
 当程序中的代码逐渐增加时，你可能会遇到这样的情况：
 
 ```kotlin
-val a = 2
-val b = a * 3 + 1
+var a = 2
+var b = a * 3 + 1
 
-val c = 4
-val d = c * 3 + 1
+var c = 4
+var d = c * 3 + 1
 
-val e = 999
-val f = e * 3 + 1
+var e = 999
+var f = e * 3 + 1
 ```
 
 注意 `b`、`d` 和 `f` 的定义，它们都是把某个变量乘 `3` 再加上 `1`，像这样的逻辑我们重复写了三次，有没有什么办法将这个“动作”提取出来，以减少代码的重复呢？
@@ -28,14 +28,14 @@ fun foo(arg: Int): Int {
     return arg * 3 + 1
 }
 
-val a = 2
-val b = foo(a)
+var a = 2
+var b = foo(a)
 
-val c = 4
-val d = foo(c)
+var c = 4
+var d = foo(c)
 
-val e = 999
-val f = foo(e)
+var e = 999
+var f = foo(e)
 ```
 
 我们定义了一个**函数（Function）**，名为 `foo`。它从外界接受一个**参数（Parameter）** `arg`，类型为 `Int`，对它做一些操作（在这里是 `arg * 3 + 1`），然后返回一个 `Int` 类型的值。这些信息都以 `fun 函数名(参数: 类型, 参数: 类型, ...): 返回值类型 { 块 }` 表示。
@@ -126,10 +126,10 @@ Pickaxe.repairWithXP(10000)     // 修复这把镐
 
 **在 Kotlin（和 Java）中，一切都是对象。**
 
-不论是数字、字符串，还是Minecraft 中的方块、物品，都是对象。属性是对象，函数的返回值是对象，甚至就连函数本身也是对象。既然是对象，那它们就同样有属性和方法。下面列举一些类型为 `Int` 的对象的方法：
+不论是数字、字符串，还是Minecraft 中的方块、物品，都是对象。属性是对象，函数的返回值是对象，甚至就连函数本身也是对象。既然是对象，那它们就同样有属性和方法。下面列举一些类型为 `Int` 的对象的方法，这些都是设计 Kotlin 的人提前为我们编写好的：
 
 ```kotlin
-val a = 10
+var a = 10
 
 a.toString()            // "10"，将数字转换为字符串表示
 a.coerceAtLeast(12)     // 12，返回对象自身与所给参数中较大的值
@@ -140,7 +140,7 @@ a.until(20)             // 返回一个 Range 对象，代表由 10 到 19 的�
 当然，既然方法的返回值是对象，那么就可以进行下面这样的**链式调用（Chained Call）**：
 
 ```kotlin
-val a = 100
+var a = 100
 a.floorDiv(3)           // 返回 33
  .coerceAtLeast(45)     // 相当于 (33).coerceAtLeast(45)，返回 45
  .plus(5)               // 相当于 (45).plus(5)，返回 50

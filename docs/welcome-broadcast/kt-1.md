@@ -154,7 +154,7 @@ if (a != 0) {
 刚才的用词是不是错了？条件分支结构不是**语句**吗？在 Kotlin 中，`if` 在有些情况下可以作为表达式来使用，例如:
 
 ```kotlin
-val a = if (b >= 0) b else -b
+var a = if (b >= 0) b else -b
 ```
 
 </details>
@@ -173,7 +173,7 @@ if (a != 0) b = 10 / a
 “好吧，但是同样的事情我在 Java 里也能做啊，为什么要用 Kotlin 呢？”有读者一定会问这样的问题，那么我们就来展示一些 Kotlin 的魔法：
 
 ```kotlin
-val a = if (b >= 0) b else -b
+var a = if (b >= 0) b else -b
 ```
 
 这段代码的实际作用就是求得 `b` 的绝对值并将其赋给 `a`，但我们居然可以直接将 `if` 结构的结果赋值给变量！好吧，也许在 Kotlin 设计师看来这没什么神奇的，因为 `if` 结构只要满足以下两个条件，就可以**当作表达式**使用，既可以用于计算，也可以用于赋值：
@@ -185,7 +185,7 @@ val a = if (b >= 0) b else -b
 
 ```kotlin
 {
-    val x = 1
+    var x = 1
     x + 2
 }
 ```
@@ -195,7 +195,7 @@ val a = if (b >= 0) b else -b
 了解了这些，你就可以写出这样的代码：
 
 ```kotlin
-val res = if (a >= b) {
+var res = if (a >= b) {
     if (b == 0) -1 else a / b       // 这个 if 表达式的值将作为外层 if 肯定块的值
 } else {
     if (a == 0) -1 else b / a       // 这个 if 表达式的值将作为外层 if 否定块的值
@@ -207,13 +207,13 @@ val res = if (a >= b) {
 顺便一提，Kotlin 的格式很灵活，你可以在代码的几乎任何位置加入或删除换行或空格，只要不拆开单词或者将两个单词连成一个，都不会影响程序的执行。上面的代码也完全可以写成一行：
 
 ```kotlin
-val res = if (a >= b) if (b == 0) -1 else a / b else if (a == 0) -1 else b / a
+var res = if (a >= b) if (b == 0) -1 else a / b else if (a == 0) -1 else b / a
 ```
 
 或者拆成很多行：
 
 ```kotlin
-val res =
+var res =
 if
 (a >= b)
 {
@@ -281,7 +281,7 @@ while (true) {
 你或许已经猜到，`continue`、`break` 以及后面要介绍的 `return` 和 `throw` 也同样是表达式。尽管这些表达式的值没有什么实际的含义，但它们可以放在一些需要表达式的地方，使得下面这样的代码可以正常编译：
 
 ```kotlin
-val b = if (a > 0) 5 else throw IllegalArgumentException()
+var b = if (a > 0) 5 else throw IllegalArgumentException()
 ```
 </details>
 
