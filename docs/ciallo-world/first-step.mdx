@@ -75,6 +75,11 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 }
+
+tasks.jar {
+    from(configurations.runtimeClasspath.get().map { zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 ```
 
 一旦你做了这个修改，屏幕的右上角就应该出现这样的图标：
@@ -147,6 +152,11 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 }
+
+tasks.jar {
+    from(configurations.runtimeClasspath.get().map { zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 ```
 
 并添加以下内容：
@@ -159,6 +169,11 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+}
+
+tasks.jar {
+    from(configurations.runtimeClasspath.get().map { zipTree(it) })
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 ```
 
@@ -213,16 +228,7 @@ version: 1.0
 api-version: 1.21
 ```
 
-现在回到 `build.gradle.kts`，在文件的最后增加下面的内容：
-
-```kotlin
-tasks.jar {
-    from(configurations.runtimeClasspath.get().map { zipTree(it) })
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-```
-
-这就是第一个插件的全部代码了！事实上我们只是创建了两个新文件，修改了一个已有的文件，并且增加了短短十几行代码，还挺简单，不是吗？虽然你可能还搞不懂这些代码的含义，但那也不要紧，本书的所有剩余内容几乎都是关于“如何编写正确的代码”的。
+这就是第一个插件的全部代码了！事实上我们只是创建了两个新文件，并且增加了短短十几行代码，还挺简单，不是吗？虽然你可能还搞不懂这些代码的含义，但那也不要紧，本书的所有剩余内容几乎都是关于“如何编写正确的代码”的。
 
 ## 从代码到插件
 
