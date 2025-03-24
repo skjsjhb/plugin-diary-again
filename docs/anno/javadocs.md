@@ -1,5 +1,5 @@
 ---
-siderbar_position: 2
+sidebar_position: 2
 ---
 
 # 3-2 扩充知识库

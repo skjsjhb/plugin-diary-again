@@ -1,5 +1,5 @@
 ---
-siderbar_position: 1
+sidebar_position: 1
 ---
 
 # 3-1 YAML Again
