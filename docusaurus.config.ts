@@ -37,6 +37,8 @@ const config: Config = {
     [
       '@docusaurus/plugin-ideal-image',
       {
+        min: 640,
+        max: 1920,
         disableInDev: false,
       },
     ],
