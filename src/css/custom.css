@@ -55,7 +55,8 @@
   text-decoration-color: var(--ifm-color-primary);
 }
 
-article em {
+article em,
+article del {
   color: #7f7f7f
 }
 

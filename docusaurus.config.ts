@@ -33,6 +33,15 @@ const config: Config = {
     locales: ['zh-CN'],
   },
 
+  plugins: [
+    [
+      '@docusaurus/plugin-ideal-image',
+      {
+        disableInDev: false,
+      },
+    ],
+  ],
+
   presets: [
     [
       'classic',
