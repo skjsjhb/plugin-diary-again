@@ -68,8 +68,13 @@ article del {
   color: #444;
 }
 
-article .theme-code-block {
+article .theme-code-block,
+article img {
   border: 2px solid #7f7f7f;
+}
+
+article img {
+  border-radius: 0.5rem;
 }
 
 article hr {

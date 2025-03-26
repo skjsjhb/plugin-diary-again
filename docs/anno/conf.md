@@ -46,7 +46,7 @@ content: Welcome to my Paper server!
 
 不同于 `plugin.yml`，配置文件的格式完全是由插件自定义的，所以你也可以选择 `aaa` 或者 `unicorn` 这样的键名，不过，通常配置文件的键名会使用有意义的名称，方便阅读和修改。
 
-我们先前提到过，YAML 的 `: ` 右侧的值具体是什么类型，是由读取 YAML 的人来定义的。Bukkit 为 YAML 定义了很多可用的类型，以下是一些常用的：
+我们先前提到过，YAML 的 `: `&nbsp;右侧的值具体是什么类型，是由读取 YAML 的人来定义的。Bukkit 为 YAML 定义了很多可用的类型，以下是一些常用的：
 
 ```yaml
 bool-value: true            # 逻辑值
