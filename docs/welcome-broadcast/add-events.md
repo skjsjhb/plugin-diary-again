@@ -89,7 +89,7 @@ ev.player.server.broadcast(msg)
 
 随后我们**构造欢迎消息**，首先是使用**插值**语法构造一个字符串：`"Welcome $name to our server!"`，这里 `$name` 代表“把 `name` 变量的内容插入到这里”，所以如果 `name` 的值是 `skjsjhb`，那么这个字符串就会被组合成 `Welcome skjsjhb to our server!`，这比用 `+` 拼接字符串要方便很多。
 
-接着我们使用 `Component.text` 把这个字符串**转换为一个消息组件**。关于 Component API 我们会在后续的章节中介绍，大家就先把它理解为“Bukkit 中传递消息的一种格式”就好。
+接着我们使用 `Component.text` 把这个字符串**转换为一个消息组件**。关于 Component API 我们会在后续的章节中介绍，大家就先把它理解为“Bukkit 中传递消息的一种格式”就好。和前面的 `Listener` 类似，这里的 `Component` 应该来自 `net.kyori.adventure.text`，而不是其它的包。如果你导入了错误的名称，IDEA 会在 `.text` 方法下方划一条红线，代表“没有这个方法”。
 
 最后，我们通过 `ev.player.server` 获取玩家所在的服务器对象，和 `Main` 中的 `server` 属性差不多，不过这里要通过玩家的信息来获取。服务器对象中已经包括了用于广播消息的方法 `broadcast`，我们将先前构造好的消息组件传递给它，一切就 OK 了！
 
