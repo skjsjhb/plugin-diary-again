@@ -147,13 +147,13 @@ fun getInt(path: String, def: Int): Int
 使用这些方法来改写我们的代码，就会简单很多，而且程序也会变得更加健壮：
 
 ```kotlin
-val isEnabled = config.getBoolean("enabled", false)                             // 默认不启用
-val content = config.getString("content", "(Announcement Here)") as String      // 默认是一个占位字符串
+val isEnabled = config.getBoolean("enabled", false)                     // 默认不启用
+val content = config.getString("content", "(Announcement Here)")!!      // 默认是一个占位字符串
 ```
 
 :::warning 一点小问题
 
-这里获取 `content` 键的时候，我们还是加上了 `as String` 进行转换，这不是因为 `getString` 方法没起到作用，而是 Kotlin **认为 `getString` 有可能返回 `null` 值**。这种问题在 Java 中不存在，因为 Java 不区分 `null` 值和正常的值，但 Kotlin 对此则非常敏感。我们在此加上 `as String`，告诉 Kotlin“别担心了，绝对能行！”来处理这个问题。
+这里获取 `content` 键的时候，我们加上了 `!!` 进行转换，表示“此值非 `null`”。这是因为 Kotlin **认为 `getString` 有可能返回 `null` 值**。像这样的问题在 Java 中并不存在，因为 Java 不区分 `null` 值和正常的值，但 Kotlin 对此则非常敏感。我们在此加上 `!!`，告诉 Kotlin：“别担心了，绝对能行！”
 
 :::
 
