@@ -119,11 +119,7 @@ systemProp.https.proxyPort=端口号
 
   </TabItem>
   <TabItem value="mirrors" label="使用镜像">
-如果没有代理，那事情就比较棘手了，原因是 Paper 1.21.4 所需的文件目前还没有可提供的镜像。也就是说，除了从 Paper 的官方服务器缓慢（甚至无法访问）地下载，我们别无他法……吗？
-
-事实上还是有办法的，我们可以使用一些旧版本的文件。Paper 1.**20**.4 的文件有可用的镜像，我们可以基于 1.20.4 的 Paper 进行构建，然后“声称”我们的插件是基于 1.21.4 的，这样应该能行，嗯，应该能。
-
-*这真不会引发什么问题吗？也许有，因为 1.21 和 1.20 的服务端并不完全相同，但是开发插件所需的大多数功能，在 1.21 和 1.20 中是相同的，也就是说，只要不碰那些“不一样的地方”，Paper 就不会发现我们造假的事实啦（笑）。*
+如果没有代理，那事情就比较棘手了，你将需要修改一系列文件，来让 Gradle 正确地使用镜像。
 
 首先打开 `gradle/wrapper/gradle-wrapper.properties`，你应当看到这样的一行：
 
@@ -139,7 +135,7 @@ distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-8.10-bin.zip
 
 当你读到这里时，Gradle 也许已经有了更新的版本，那么在修改时，就还保留原来的版本就好。也就是说，如果 URL 最后那部分不是 `8.10`，而是诸如 `8.12` 或者 `9.4` 这样的版本，那保留它就好。另外注意在 `https` 和 `:` 之间有一根反斜线 `\`，不要将其删除了。
 
-现在回到 `build.gradle.kts`，删除掉先前添加的内容：
+现在回到 `build.gradle.kts`，找到并删除这部分内容（注意不要把下方的 `dependencies` 也删除了）：
 
 ```kotlin
 repositories {
@@ -148,32 +144,14 @@ repositories {
         url = uri("https://repo.papermc.io/repository/maven-public/")
     }
 }
-
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-}
-
-tasks.jar {
-    from(configurations.runtimeClasspath.get().map { zipTree(it) })
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
 ```
 
-并添加以下内容：
+并在相同位置，添加以下内容：
 
 ```kotlin
 repositories {
     maven("https://maven.aliyun.com/repository/public/")
     maven("https://crystal.app.lss233.com/repositories/minecraft/")
-}
-
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-}
-
-tasks.jar {
-    from(configurations.runtimeClasspath.get().map { zipTree(it) })
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 ```
 
@@ -186,6 +164,17 @@ repositories {
 ```
 
 并将其删除。
+
+打开 `settings.gradle.kts`，并在文件**最上方**（`plugins` 上方）添加如下内容：
+
+```kotlin
+pluginManagement {
+    repositories {
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
+        gradlePluginPortal()
+    }
+}
+```
 
 现在，请展开屏幕右侧的 Gradle 面板（图标像是一头大象），并点按左上角的 <kbd>Sync All Gradle Projects</kbd>，希望这次一切都顺利。
 
