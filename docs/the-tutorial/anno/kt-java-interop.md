@@ -187,7 +187,7 @@ pk.name = "My Pickaxe"  // Kotlin 会调用 Java 中的 setName 方法，修改�
 public FileConfiguration getConfig()
 ```
 
-这个 Getter 返回一个 `FileConfiguration` 类的对象，也就是配置文件对象。在 Kotlin 中，它被转换成一个名为 `config` 的属性，读取该属性就等同于调用 `getConfig`。由于 `getConfig` 是 `JavaPlugin` 的一个方法，我们的 `Main` 继承自 `JavaPlugin`，所以我们的 `Main` 也能使用 `getConfig`，那么也就同样能使用 Kotlin 生成的 `config` 属性了。
+这个 Getter 返回一个 `FileConfiguration` 类的对象，也就是配置文件对象。在 Kotlin 中，它被转换成一个名为 `config` 的属性，**读取该属性就等同于调用 `getConfig` 方法**。由于 `getConfig` 是 `JavaPlugin` 的一个方法，我们的 `Main` 继承自 `JavaPlugin`，所以我们的 `Main` 也能使用 `getConfig`，那么也就同样能使用 Kotlin 生成的 `config` 属性了。
 
 ---
 
