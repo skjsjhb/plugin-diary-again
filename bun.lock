@@ -8,6 +8,7 @@
         "@docusaurus/plugin-ideal-image": "^3.7.0",
         "@docusaurus/preset-classic": "3.7.0",
         "@docusaurus/theme-mermaid": "^3.7.0",
+        "@fontsource-variable/jetbrains-mono": "^5.2.5",
         "@mdx-js/react": "^3.0.0",
         "@shikijs/rehype": "~1.22.2",
         "clsx": "^2.0.0",
@@ -433,6 +434,8 @@
     "@docusaurus/utils-common": ["@docusaurus/utils-common@3.7.0", "", { "dependencies": { "@docusaurus/types": "3.7.0", "tslib": "^2.6.0" } }, "sha512-IZeyIfCfXy0Mevj6bWNg7DG7B8G+S6o6JVpddikZtWyxJguiQ7JYr0SIZ0qWd8pGNuMyVwriWmbWqMnK7Y5PwA=="],
 
     "@docusaurus/utils-validation": ["@docusaurus/utils-validation@3.7.0", "", { "dependencies": { "@docusaurus/logger": "3.7.0", "@docusaurus/utils": "3.7.0", "@docusaurus/utils-common": "3.7.0", "fs-extra": "^11.2.0", "joi": "^17.9.2", "js-yaml": "^4.1.0", "lodash": "^4.17.21", "tslib": "^2.6.0" } }, "sha512-w8eiKk8mRdN+bNfeZqC4nyFoxNyI1/VExMKAzD9tqpJfLLbsa46Wfn5wcKH761g9WkKh36RtFV49iL9lh1DYBA=="],
+
+    "@fontsource-variable/jetbrains-mono": ["@fontsource-variable/jetbrains-mono@5.2.5", "", {}, "sha512-G3sN1xq1moZd0JL+hFaA4MEdsiQS+JXC/z7m+EqA5/Fzn5CQlXGUaaNKFGQdDsFuLTnCfW0KOOSWHjygNfjEPw=="],
 
     "@hapi/hoek": ["@hapi/hoek@9.3.0", "", {}, "sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ=="],
 

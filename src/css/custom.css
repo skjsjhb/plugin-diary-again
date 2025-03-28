@@ -93,6 +93,11 @@ pre {
   background-color: var(--prism-background-color);
 }
 
+pre,
+code {
+  font-family: "JetBrains Mono";
+}
+
 [data-theme="dark"] pre {
   color: var(--shiki-dark) !important;
 }
