@@ -14,7 +14,7 @@ sidebar_position: 4
 enabled: true
 command:
   label: "Ciallo～(∠・ω< )⌒☆"
-  run: "/say Ciallo～(∠・ω< )⌒☆"
+  run: "say Ciallo～(∠・ω< )⌒☆"
 liftoff:
   velocity: 5
 ```
@@ -23,7 +23,7 @@ liftoff:
 
 Maybe.
 
-这里我们允许管理员通过修改 `command.label` 来改变按钮的标签（即显示的文本），`command.run` 来改变要执行的命令。此外，我们还给“快速起飞”功能增加了一个可调的 `liftoff.velocity`，允许管理员决定起飞的动量（或者说速度）有多大。
+这里我们允许管理员通过修改 `command.label` 来改变按钮的标签（即显示的文本），`command.run` 来改变要执行的命令（命令没有前缀 `/`）。此外，我们还给“快速起飞”功能增加了一个可调的 `liftoff.velocity`，允许管理员决定起飞的动量（或者说速度）有多大。
 
 另外我们保留了先前的 `enabled` 选项。基本上来说，每个插件都会有一个选项开启或关闭插件功能，这是因为从 `plugins` 中移除和添加插件是相对麻烦的，而修改配置文件则简单很多。
 
@@ -102,7 +102,27 @@ class EventHandlers(
 现在，向 `onEnable` 中添加如下代码来实例化 `EventHandlers` 并将它注册（还记得吗，类只是蓝图）：
 
 ```kotlin
-server.pluginManager.registerEvents(EventHandlers(config), this)
+if (config.getBoolean("enabled", false)) {
+    server.pluginManager.registerEvents(EventHandlers(config), this)
+}
 ```
 
 由于通过 `EventHandlers(config)` 创建的对象此后不会再使用，因此就不必创建额外的中间变量，直接将它作为参数传递就好。
+
+到目前为止，`Main.kt` 的内容如下：
+
+```kotlin
+class Main : JavaPlugin() {
+    override fun onEnable() {
+        saveDefaultConfig()
+        if (config.getBoolean("enabled", false)) {
+            server.pluginManager.registerEvents(EventHandlers(config), this)
+        }
+    }
+}
+
+class EventHandlers(
+    private val config: ConfigurationSection
+) : Listener {
+}
+```
