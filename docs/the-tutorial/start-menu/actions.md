@@ -103,14 +103,14 @@ class EventHandlers(
 
     @EventHandler
     fun onInventoryClick(ev: InventoryClickEvent) {
-        val iv = ev.clickedInventory ?: return
-        if (iv.holder is StartMenuInventoryHolder) {
-            val clicker = ev.whoClicked as? Player ?: return
+        val iv = ev.clickedInventory ?: return                  // 判断所点击物品栏是否为 null
+        if (iv.holder is StartMenuInventoryHolder) {            // 判断是否是我们创建的物品栏
+            val clicker = ev.whoClicked as? Player ?: return    // 获取点击物品栏的玩家
 
-            val item = ev.currentItem ?: return
-            ev.isCancelled = true
+            val item = ev.currentItem ?: return                 // 获取被点击的物品
+            ev.isCancelled = true                               // 防止物品被拿走
 
-            when (item.type) {
+            when (item.type) {                                  // 根据物品类型执行操作
                 Material.BARRIER -> clicker.health = 0.0
 
                 Material.FIREWORK_ROCKET ->
