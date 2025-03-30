@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# 2-2 搭上 Kotlin 号出发（下）
+# KT-2 搭上 Kotlin 号出发（下）
 
 ## 发现、创造和使用魔法
 

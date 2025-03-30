@@ -2,7 +2,7 @@
 sidebar_position: 6
 ---
 
-# 3-6 Java 那点事
+# KT-5 Java 那点事
 
 ## 访问控制
 

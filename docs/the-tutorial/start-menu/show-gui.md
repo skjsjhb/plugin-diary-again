@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# 4-5 创建和响应 GUI
+# 4-4 创建和响应 GUI
 
 ## 构造物品栏
 
