@@ -4,6 +4,8 @@ sidebar_position: 8
 
 # 4-6 处理命令
 
+## 用函数处理命令
+
 先前我们已经在 `plugin.yml` 中添加了 `menu` 命令，但它没有相应的处理代码，所以尝试执行这条命令时，Bukkit 什么也不会做（实际上只会把你输入的命令原样显示给你）。所以，像事件处理函数一样，我们现在要添加一个**命令处理函数（Command Executor）**，来**解释**命令。
 
 :::tip 术语库
@@ -66,6 +68,8 @@ fun onCommand(sender: CommandSender, command: Command, label: String, args: Arra
 - `args`：一个包含命令参数的数组
 
 在这个插件中，我们只用到 `sender`（用于显示菜单），在后续的项目中，我们会经常用到剩余的参数，用来处理更复杂的命令。
+
+## 执行命令动作
 
 当设置命令处理函数后，我们现在要在命令处理函数（那个 Lambda）中添加相关的代码：
 
