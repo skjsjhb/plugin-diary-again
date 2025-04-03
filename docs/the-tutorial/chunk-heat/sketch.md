@@ -55,6 +55,7 @@ cooldown: 200
 
 ```kotlin
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.plugin.java.JavaPlugin
@@ -67,8 +68,9 @@ class Main : JavaPlugin() {
 }
 
 class EventHandlers(private val config: ConfigurationSection) : Listener {
+    @EventHandler
     fun onMobSpawn(ev: EntitySpawnEvent) {
-        if (config.getBoolean("enabled")) {
+        if (!config.getBoolean("enabled")) {
             // 要做之事……
         }
     }
