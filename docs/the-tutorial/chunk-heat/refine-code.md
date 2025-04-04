@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# 5-4 优化代码
+# 5-4 优化事件处理代码
 
 ## 记忆是个糟糕的东西
 
@@ -39,7 +39,7 @@ class EventHandlers(private val config: ConfigurationSection) : Listener {
 
 :::
 
-当生成了 `sessionId` 后，我们可以创建相应的键，并在读取热量值和过热时间之前，先检查会话 ID 是否有效：
+当生成了 `sessionId` 后，我们可以创建相应的键，并在读取热量值和过热时间之前，先**检查会话 ID 是否有效**：
 
 ```kotlin
 val sessionIdKey = NamespacedKey.fromString("chunk_heat:session")!!
@@ -48,16 +48,11 @@ val storedSessionId = chunk.persistentDataContainer.get(sessionIdKey, Persistent
 if (storedSessionId != sessionId) {
     chunk.persistentDataContainer.remove(heatKey)
     chunk.persistentDataContainer.remove(lastOverheatTimeKey)
+    chunk.persistentDataContainer.set(sessionIdKey, PersistentDataType.STRING, sessionId)
 }
 ```
 
-读者请先自行思考一下，这些代码应当插入在事件处理函数的什么位置。我们从 PDC 中读取区块当前存储的会话 ID，并与插件生成的 `sessionId` 进行比较，如果二者不一致，就通过 `remove` 方法，从 PDC 中删除这些值。
-
-最后，在区块过热时，除了存储过热时间，我们也向 PDC 中相应写入当前的会话 ID：
-
-```kotlin
-chunk.persistentDataContainer.set(sessionIdKey, PersistentDataType.STRING, sessionId)
-```
+读者请先自行思考一下，这些代码应当插入在事件处理函数的什么位置。我们从 PDC 中读取区块当前存储的会话 ID，并与插件生成的 `sessionId` 进行比较，如果二者不一致，就通过 `remove` 方法，从 PDC 中**删除**这些值，然后将会话 ID **修正**为当前的会话 ID。
 
 完成的代码看上去像这样，不过在展开之前，希望大家自行尝试一下 —— 这并不困难！
 
@@ -115,7 +110,25 @@ class EventHandlers(private val config: ConfigurationSection) : Listener {
 
 </details>
 
-这样我们就修复了这个漏洞，可喜可贺！不过我们的代码还有一些可以改进的地方……
+这样我们就修复了这个漏洞，可喜可贺！
+
+## 0 不是那么完美
+
+我们的插件中还存在另一个漏洞，这是因为我们对 `lastOverheatTime` 的处理比较偷工减料：如果 PDC 中没有最近过热时间的信息，我们就**认为最近一次过热是在 0 刻时发生的** —— 这其实有点问题，会导致在服务器启动的一段时间内，由于插件误以为区块“仍然在冷却中”，所以无法生成实体。
+
+也许更好的方法是不将 `lastOverheatTime` 的值默认为 `0`，而是单独处理这个值为 `null` 的情况：
+
+```kotlin
+// 去掉默认值 0
+val lastOverheatTime = chunk.persistentDataContainer.get(lastOverheatTimeKey, PersistentDataType.INTEGER) /* ?: 0 */
+
+// 在 if 中单独处理 null 的情况
+if (lastOverheatTime != null && Bukkit.getCurrentTick() < lastOverheatTime + config.getInt("cooldown")) {
+    // ...
+}
+```
+
+在做了这个修改后，相应的漏洞也就修复完成。
 
 ## 重用资源
 
