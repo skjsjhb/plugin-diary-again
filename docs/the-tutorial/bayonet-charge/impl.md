@@ -103,14 +103,14 @@ if (!ev.player.isSprinting) return
 通过 `PlayerInteractEvent` 的 `item` 属性可以取得触发这个交互所用的物品，进而可以获取其类型。判定物品类型和上一章中判定实体类型一样，我们要获取物品的命名空间 ID，再使用 `contains` 查询该命名空间 ID 是否在 `chargingItems` 配置值中：
 
 ```kotlin
-if (chargingItems.contains(ev.item?.type?.key?.toString())) return
+if (!chargingItems.contains(ev.item?.type?.key?.toString())) return
 ```
 
 `?.` 是**安全访问运算符（Safe Call Operator）**，它和直接用 `.` 访问属性和方法基本一样，但是它可以对 `null` 值使用，如果对象值不是 `null`，它就和 `.` 一样访问指定的属性和方法，如果对象值是 `null`，那么 `?.` 就什么也不做，简单把这个 `null` 值“传递”下去。
 
 如果玩家手中没有任何物品，`ev.item` 的值就是 `null`，连带着后面的 `type`、`key` 都有可能是 `null`，所以我们连续使用三次 `?.` 访问命名空间 ID，并将它转换成字符串。不管如何，最后的结果要么是一个命名空间 ID 字符串，要么就是 `null`。
 
-由于 `chargingItems` 是通过 `getStringList` 读取的，而 `getStringList` 返回的 `List` 中从不包含 `null`（它会忽略无法读取的值），因此如果括号内的值是 `null`，那么 `contains` 方法肯定返回 `false`，而如果不是，我们就和以前一样，正常通过 `contains` 检测该命名空间 ID 是否是指定的物品之一。
+由于 `chargingItems` 是通过 `getStringList` 读取的，而 `getStringList` 返回的 `List` 中从不包含 `null`（它会忽略无法读取的值），因此如果括号内的值是 `null`，那么 `contains` 方法肯定返回 `false`，而如果不是，我们就和以前一样，正常通过 `contains` 检测该命名空间 ID 是否是指定的物品之一，如果不是，就离开函数。
 
 ### 获取状态效果
 
@@ -198,7 +198,7 @@ fun onBeginCharge(ev: PlayerInteractEvent) {
     if (ev.action != Action.RIGHT_CLICK_AIR) return
     if (!ev.player.isSprinting) return
     if (ev.player.hasPotionEffect(PotionEffectType.SLOWNESS)) return
-    if (chargingItems.contains(ev.item?.type?.key?.toString())) return
+    if (!chargingItems.contains(ev.item?.type?.key?.toString())) return
     if (chargingBar.containsKey(ev.player.uniqueId)) return
 
     // 添加速度效果

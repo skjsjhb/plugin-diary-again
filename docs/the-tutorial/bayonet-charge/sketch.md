@@ -11,7 +11,7 @@ sidebar_position: 3
 我们所使用的 `plugin.yml` 如下：
 
 ```yaml
-name: BayonetCharging
+name: BayonetCharge
 author: skjsjhb
 description: Charge and dash with an iron sword on your hand!
 website: https://bpd.skjsjhb.moe/docs/the-tutorial/bayonet-charge/sketch
