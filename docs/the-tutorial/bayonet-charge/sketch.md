@@ -43,7 +43,7 @@ slowness-amplifier: 2
 slowness-duration: 100
 
 # 冲锋体力条显示的文字
-title: 刺刀冲锋 - 潜行以取消
+title: 刺刀冲锋 - 停止疾跑以取消
 
 # 冲锋击杀发送的消息
 kill-msg: 你使用刺刀冲锋击杀了 {name}
@@ -75,7 +75,9 @@ class BayonetChargeListener(private val config: ConfigurationSection) : Listener
 ```kotlin
 override fun onEnable() {
     saveDefaultConfig()
-    server.pluginManager.registerEvents(BayonetChargeListener(config), this)
+    if (config.getBoolean("enabled")) {
+        server.pluginManager.registerEvents(BayonetChargeListener(config), this)
+    }
 }
 ```
 
@@ -87,3 +89,4 @@ override fun onEnable() {
 
 :::
 
+由于这次的插件没有实时启停的需要（像这种扩展游戏内容的插件通常不需要频繁启用和停用），因此我们使用传统的方法，在注册监听器前检查插件是否启用。
