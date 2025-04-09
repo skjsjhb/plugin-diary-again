@@ -100,7 +100,7 @@ if (!ev.player.isSprinting) return
 
 ### 获取手持物品
 
-通过 `PlayerInteractEvent` 的 `item` 属性可以取得触发这个交互所用的物品，进而可以获取其类型。判定物品类型和上一章中判定实体类型一样，我们要获取物品的命名空间 ID，再使用 `contains` 查询该命名空间 ID 是否在 `chargingItems` 配置值中：
+通过 `PlayerInteractEvent` 的 `item` 属性可以取得触发这个交互所用的物品，进而可以获取其类型。判定物品类型和上一章中判定实体类型一样，我们要通过 `type.key.toString()` 获取物品的**命名空间 ID**，再使用 `contains` **查询**该命名空间 ID 是否在 `chargingItems` 配置值中：
 
 ```kotlin
 if (!chargingItems.contains(ev.item?.type?.key?.toString())) return
@@ -108,9 +108,15 @@ if (!chargingItems.contains(ev.item?.type?.key?.toString())) return
 
 `?.` 是**安全访问运算符（Safe Call Operator）**，它和直接用 `.` 访问属性和方法基本一样，但是它可以对 `null` 值使用，如果对象值不是 `null`，它就和 `.` 一样访问指定的属性和方法，如果对象值是 `null`，那么 `?.` 就什么也不做，简单把这个 `null` 值“传递”下去。
 
-如果玩家手中没有任何物品，`ev.item` 的值就是 `null`，连带着后面的 `type`、`key` 都有可能是 `null`，所以我们连续使用三次 `?.` 访问命名空间 ID，并将它转换成字符串。不管如何，最后的结果要么是一个命名空间 ID 字符串，要么就是 `null`。
+如果玩家手中没有任何物品，`ev.item` 的值就是 `null`，连带着后面的 `type`、`key` 都有可能是 `null`，所以我们连续使用三次 `?.` 运算符，获得命名空间 ID 字符串。
 
-由于 `chargingItems` 是通过 `getStringList` 读取的，而 `getStringList` 返回的 `List` 中从不包含 `null`（它会忽略无法读取的值），因此如果括号内的值是 `null`，那么 `contains` 方法肯定返回 `false`，而如果不是，我们就和以前一样，正常通过 `contains` 检测该命名空间 ID 是否是指定的物品之一，如果不是，就离开函数。
+这一连串 `?.` 的结果，要么是物品的命名空间 ID，要么是 `null`，而 `chargingItems` 中肯定不含有 `null`，所以我们通过 `contains` 检测该命名空间 ID 是否是指定的物品之一，如果不是，就离开函数。
+
+:::note
+
+`getStringList` 与 `getString` 不同，当遇到无法读取的值时，它简单将其忽略，而不会在返回的列表中包含 `null`。
+
+:::
 
 ### 获取状态效果
 
@@ -130,18 +136,18 @@ if (ev.player.hasPotionEffect(PotionEffectType.SLOWNESS)) return
 if (ev.action != Action.RIGHT_CLICK_AIR) return
 ```
 
-`Action` 枚举类中的 `RIGHT_CLICK_AIR` 代表“右键点击空气”，除此之外，还有 `LEFT_CLICK_AIR`（左键点击空气）、`RIGHT_CLICK_BLOCK`（右键点击方块）和 `LEFT_CLICK_BLOCK`（左键点击方块）等类型，用来判断不同的交互方式。
+`Action` 枚举类中的 `RIGHT_CLICK_AIR` 代表“右键点击空气”。
 
 ### 添加状态效果
 
-在上述的判定都通过后，我们就可以利用 `addPotionEffect` 方法和 `PotionEffect` 的构造函数来为玩家添加一个速度效果：
+在上述的判定都通过后，我们就可以利用 `addPotionEffect` 方法和 `PotionEffect` 的构造函数来为玩家**添加一个速度效果**：
 
 ```kotlin
 ev.player.addPotionEffect(
     PotionEffect(
-        PotionEffectType.SPEED,
-        PotionEffect.INFINITE_DURATION,
-        speedAmplifier
+        PotionEffectType.SPEED,             // 速度
+        PotionEffect.INFINITE_DURATION,     // 持续时间无限
+        speedAmplifier                      // 效果等级
     )
 )
 ```
@@ -149,7 +155,7 @@ ev.player.addPotionEffect(
 `PotionEffect` 的构造函数接受三个参数：
 
 - 第一个参数从 `PotionEffectType` 中取值，代表效果类型。
-- 第二个参数是持续时间，虽然这里我们传入了 `PotionEffect.INFINITE_DURATION`，看上去像是一个枚举，但这里实际上是一个数字，代表状态效果的持续时间（单位为刻）。`PotionEffect.INFINITE_DURATION` 只是一个方便记忆的名字而已，用来表示持续时间无限。
+- 第二个参数是持续时间，这里实际上是一个数字，代表状态效果的持续时间（单位为刻）。`PotionEffect.INFINITE_DURATION` 只是一个方便记忆的名字而已，它的值是 `-1`，用来表示持续时间无限。
 - 第三个参数为效果等级，这里传入的等级是游戏内显示的等级 -1，也就是说，“速度 IV” 对应的等级是 3。
 
 虽然我们为玩家添加了持续时间无限的速度效果，不过这个效果只会在冲锋的时候存在，我们会在冲锋结束的时候将它清除。
@@ -175,12 +181,20 @@ Bukkit 中有两个不同的 `BossBar` 类，一个是我们用到的 `net.kyori
 
 四个参数的作用分别是：
 
-- 标题。和聊天信息什么的一样，这里也需要提供一个组件，我们可以用 `Component.text` 来创建。
-- 初始进度。取值是 `0f` 至 `1f`。这里的后缀 `f` 代表创建一个 `Float` 类型的数（`Float` 和 `Double` 是两种不同精度的小数）。`BossBar` 的构造函数需要 `Float` 类型，而直接写 `0`（类型为 `Int`）或者 `0.0`（类型为 `Double`）的类型都不对，必须要加上 `f` 后缀，Kotlin 才能知道我们想创建一个 `Float` 类型的数。
-- 颜色。从 `BossBar.Color` 枚举类中取值。
-- 分段数。从 `BossBar.Overlay` 枚举类中取值。状态条可以是连续的，或者分作几段，这都是视觉上的效果，不会对进度值产生任何影响。
+- 标题，和聊天信息什么的一样，这里也需要提供一个**组件**，我们可以用 `Component.text` 来创建。
+- 初始进度，取值是 `0f` 至 `1f`。
+- 颜色，从 `BossBar.Color` 枚举类中取值。
+- 分段数，从 `BossBar.Overlay` 枚举类中取值。状态条可以是连续的，或者分作几段，这都是视觉上的效果，不会对进度值产生任何影响。
 
-当创建了 BOSS 状态条后，我们就可以将它对玩家显示，同时将它和玩家信息一并登记到我们的映射表 `chargingBar` 中：
+:::note
+
+`1f` 的后缀 `f` 代表**创建一个 `Float` 类型的小数**。在 Kotlin 中，小数有两种，分别是 `Float` 和 `Double`。`Double` 的精度比 `Float` 高，但也需要使用更多的内存。取决于所需的精度，Bukkit（和其它 Java 程序）有时会采用 `Float` 来存储数据，`BossBar` 的进度是其中一例。
+
+Kotlin 中的小数默认是 `Double` 类型，整数默认是 `Int` 类型，必须在后面加上 `f`，Kotlin 才会知道我们想表示一个 `Float` 类型的数。
+
+:::
+
+当创建了 BOSS 状态条后，我们就可以将它对玩家**显示**，同时将它和玩家信息一并**登记**到我们的映射表 `chargingBar` 中：
 
 ```kotlin
 ev.player.showBossBar(bossBar)              // 显示 BOSS 状态条
@@ -250,7 +264,7 @@ val bb = chargingBar[ev.player.uniqueId] ?: return
 
 ### 停止冲锋的逻辑
 
-在停止疾跑、碰到实体或者距离耗尽后，玩家的冲锋会停止，在这三种情况下，我们都需要为玩家附加缓慢效果，并删除相应的 `BossBar`。为此，我们可以先编写一个函数，将停止冲锋要做的事情提取出来：
+在停止疾跑、碰到实体或者距离耗尽后，玩家的冲锋会停止，在这三种情况下，我们都需要为玩家附加缓慢效果，并删除相应的 `BossBar`。为此，我们可以先**编写一个函数**，将停止冲锋要做的事情提取出来：
 
 ```kotlin
 fun endCharge() {
@@ -269,9 +283,11 @@ fun endCharge() {
 
 这个函数直接写在 `onChargeUpdate` 事件处理函数中，因此它可以直接访问在外层定义的参数 `ev`。
 
-我们首先清除已有的速度效果，然后附加一个缓慢效果。缓慢效果的时间与剩余的冲锋距离相关，也就是说，如果玩家只冲锋了一小段距离就停下，那么我们希望让冷却时间短些。`bb.progress()` 获取 BOSS 状态条当前存储的进度值，我们再将它乘上最大冷却时间，就得到这次冲锋适用的冷却时间。`toInt` 方法将乘法的结果转换为整数刻数。
+我们首先清除已有的速度效果，然后附加一个缓慢效果。缓慢效果的时间与已经冲锋的距离相关，也就是说，如果玩家只冲锋了一小段距离就停下，那么我们希望让冷却时间短些。`1 - bb.progress()` 获取 BOSS 状态条“已经消耗”的进度值，我们再将它乘上最大冷却时间，就得到这次冲锋适用的冷却时间。`toInt` 方法将乘法的结果转换为整数刻数。
 
-`hideBossBar` 方法告诉 Bukkit 不再将指定的 BOSS 状态条向玩家展示。在隐藏了 BOSS 状态条后，我们就将玩家的 UUID 从 `chargingBar` 中删除（通过 `remove` 方法），对应的 `BossBar` 会由 Kotlin 自动清理。
+`hideBossBar` 方法从玩家的界面中删除指定的 BOSS 状态条。
+
+最后，我们将玩家的 UUID 从 `chargingBar` 中删除（通过 `remove` 方法），这样玩家的这次冲锋处理就结束了，`chargingBar` 中不再有玩家的信息，一切就回到了最开始的状态。
 
 ### 判断疾跑状态
 
@@ -286,7 +302,7 @@ if (!ev.player.isSprinting) {
 
 ### 判断实体碰撞
 
-现在我们通过 `getNearbyEntities` 获取玩家附近的实体：
+现在我们来实现冲锋击杀的功能，通过 `getNearbyEntities` 获取玩家附近的实体：
 
 ```kotlin
 val entities = ev.player.getNearbyEntities(0.5, 0.5, 0.5)
@@ -300,11 +316,13 @@ val entities = ev.player.getNearbyEntities(0.5, 0.5, 0.5)
 val target = entities.find { it is LivingEntity } as LivingEntity?
 ```
 
-这是因为在 Minecraft 中，除了僵尸、鸡这样的生物，还有矿车、移动的方块、激活的 TNT 等特殊实体，后者没有生命值之谈，所以将它们排除在刺刀冲锋之外才合理。所有的生物实体都实现 `LivingEntity`，所以我们可以用 `is` 来判断。
+这是因为在 Minecraft 中，除了僵尸、鸡这样的生物，还有矿车、移动的方块、激活的 TNT 等特殊实体，后者没有生命值之谈，所以将它们排除在刺刀冲锋之外才合理。**所有的生物实体都实现 `LivingEntity`**，所以我们可以用 `is` 来判断。
 
-`find` 方法返回第一个使指定 Lambda（在这里是 `{ it is LivingEntity }`）返回 `true` 的值，如果不存在则返回 `null`。在最后我们还要进行一次 `as` 转换，因为理论上 `find` 可以返回原先列表中的**任何一个值**，它们的类型为 `Entity`，Kotlin 在编译时并不知道 Lambda 的内容，但我们知道，并且我们希望 `target` 的类型是 `LivingEntity` 而不仅是 `Entity`，所以要做这样的转换。`LivingEntity?` 最后的 `?` 允许该转换接受 `null` 值。
+`find` 方法接受一个 Lambda，它在列表中**寻找第一个**满足条件（即使得 `{ it is LivingEntity }` 返回 `true`）的元素，如果没有这样的元素，它返回 `null`。
 
-如果找到了这样的实体，就可以对它造成伤害，并结束冲锋，同时向玩家发送一条消息：
+查找到结果后，我们还要进行一次 `as` 转换，因为 `find` 返回的类型为**列表中的原始类型**，即 `Entity`，但我们希望 `target` 的类型是 `LivingEntity`，因为我们的 Lambda 中已经描述了这一点。`LivingEntity?` 最后的 `?` 允许该转换接受 `null` 值。
+
+如果找到了这样的实体，就可以对它造成伤害，并结束冲锋，同时向玩家**发送一条消息**：
 
 ```kotlin
 if (target != null) {
@@ -318,11 +336,21 @@ if (target != null) {
 }
 ```
 
-`replace` 方法将原始字符串中指定的部分替换成新的内容，在这里我们把 `{name}` 替换成被击杀生物的名称。在配置文件中，用户不可能知道玩家击杀了什么生物，因此我们与用户约定：使用 `{name}` 这样的符号进行**占位**，我们的插件会将它替换成合适的内容。你也可以使用 `%name%`、`$name` 等占位符，这说到底只是个人喜好。
+`replace` 方法将原始字符串中**指定的部分替换成新的内容**，在这里我们把 `{name}` 替换成被击杀生物的名称，这叫做**占位符**替换。
+
+:::tip 术语库
+
+**占位符（Placeholder）** 可以简单理解为填空题中的**空**，不过是带有名字的。如果字符串中的某些部分无法在编写字符串时进行确定，就可以使用占位符，稍后可以通过字符串**替换**将占位符换成实际的内容。
+
+在配置文件中，用户不可能知道玩家击杀了什么生物，因此我们与用户约定：使用 `{name}` 这样的符号进行**占位**，我们的插件会将它替换成合适的内容。你也可以使用 `%name%`、`$name` 等占位符，这说到底只是个人喜好。
+
+:::
 
 ### 计算剩余距离
 
-如果玩家既没有停止疾跑也没有撞上实体，那么我们就该更新剩余的冲锋距离了。我们首先获得玩家这次移动的距离：
+如果玩家既没有停止疾跑也没有撞上实体，那么我们就该**更新剩余的冲锋距离**了。
+
+我们首先获得玩家这次移动的距离：
 
 ```kotlin
 val dis = ev.from.distance(ev.to)
@@ -336,7 +364,7 @@ val dis = ev.from.distance(ev.to)
 val remainingBlocks = bb.progress() * maxDistance
 ```
 
-如果 `dis` 比 `remainingBlocks` 还大，那么在这次移动中，玩家已经耗尽了冲锋距离，于是我们就取消冲锋：
+如果 `dis` 比 `remainingBlocks` 还大，那么在这次移动中，玩家已经**耗尽了冲锋距离**，于是我们就取消冲锋：
 
 ```kotlin
 if (remainingBlocks <= dis) {
@@ -345,7 +373,7 @@ if (remainingBlocks <= dis) {
 }
 ```
 
-否则，我们减去 `dis` 那么多距离，然后将剩余距离除以最大冲锋距离，以得到新的进度值，并设置到 `bb` 中：
+否则，我们减去 `dis` 那么多距离，然后将剩余距离除以最大冲锋距离，以得到**新的进度值**，并设置到 `bb` 中：
 
 ```kotlin
 bb.progress(((remainingBlocks - dis) / maxDistance).toFloat())
@@ -411,4 +439,4 @@ fun onChargeUpdate(ev: PlayerMoveEvent) {
 
 这一节可真是 —— 长！这主要是因为我们要在一个监听器内处理 BOSS 状态条、玩家运动、实体碰撞判断等多种功能，逻辑上比较琐碎，不过整体代码其实不长（不到 100 行），非常希望大家能自行编写，不过要是真心想偷懒复制粘贴，那就请君自便（笑）。
 
-本节的内容，大家只需了解个大概，知道“哦，要对玩家登记数据，判断开始和结束什么的”就足够了，剩下的那些代码（比如 `attack`），无非是为了优化玩家体验而添加的。所用到的各种方法，我们也没有给出详细的方法签名，大家如果能大概明白“哦，有这么个 `bossBar` 方法，参数是标题、进度、分段什么的”就已经非常好了。在实际编写更复杂的插件的时候，你可以随时去查阅文档，了解 Bukkit（和 Paper）都提供了哪些有用的功能来实现你的设计。
+本节的内容，大家只需了解个大概，知道“哦，要对玩家登记数据，判断开始和结束什么的”就足够了，剩下的那些代码，无非只是调用了一堆函数，以及简单的加减乘除而已。所用到的各种方法，我们也没有给出详细的方法签名，大家只要能大概明白“哦，有这么个 `bossBar` 方法，参数是标题、进度、分段什么的”就已经非常好了。在实际编写更复杂的插件的时候，你可以随时去查阅文档，了解 Bukkit（和 Paper）都提供了哪些有用的功能来实现你的设计。
