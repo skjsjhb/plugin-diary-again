@@ -37,6 +37,11 @@
   color: #e32964;
 }
 
+article strong:not(blockquote strong) {
+  text-decoration: underline dashed;
+  text-underline-offset: 20%;
+}
+
 [data-theme='dark'] blockquote strong {
   color: #aaa;
 }
