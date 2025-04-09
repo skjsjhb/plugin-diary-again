@@ -103,8 +103,10 @@ fun serializeItemsAsBytes(items: Array<ItemStack>): ByteArray
 物品栏数据存储完成后，我们就可以将内存中的物品栏删除，腾出些空间来：
 
 ```kotlin
-bpMap.remove(ev.player.uniqueId)
+backpacks.remove(ev.player.uniqueId)
 ```
+
+在从 `backpacks` 中删除了玩家的 UUID 后，Kotlin 就会发现对应的物品栏没有人再需要了，就会自动将它删除。
 
 ## 加载和显示物品栏
 
@@ -276,7 +278,7 @@ class BackpackListener(
     fun onPlayerLeave(ev: PlayerQuitEvent) {
         val holder = backpacks[ev.player.uniqueId] ?: return
         bpMap[ev.player.uniqueId] = ItemStack.serializeItemsAsBytes(holder.inventory.storageContents)
-        bpMap.remove(ev.player.uniqueId)
+        backpacks.remove(ev.player.uniqueId)
     }
 }
 ```
