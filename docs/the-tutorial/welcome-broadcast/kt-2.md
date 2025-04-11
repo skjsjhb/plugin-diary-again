@@ -166,17 +166,17 @@ GLFWwindow* glfwCreateWindow()
 为了解决这一问题，Kotlin 和 Java 发展出了**包（Package）** 的概念。包本质上就是一种前缀，比如我们在第一个插件中使用的代码：
 
 ```kotlin
-org.bukkit.Bukkit.getServer().shutdown()
+org.bukkit.plugin.java.JavaPlugin
 ```
 
-这里 `org.bukkit.Bukkit` 实际上是对象名，后面才是方法调用，并没有名为 `org` 的对象，`bukkit` 也不是某个属性的名字。
+这里 `org.bukkit.plugin.java.JavaPlugin` 实际上才是完整的类名，并没有名为 `org` 的对象，`bukkit` 也不是某个属性的名字。
 
 像这样的名字被称作**全名**，或者**规范化名称（Canonical Name）**，它由两部分构成：
 
-- 一个**包名（Package Name）**，这里是 `org.bukkit`。
-- 一个**基本名（Base Name）**，这里是 `Bukkit`。
+- 一个**包名（Package Name）**，这里是 `org.bukkit.plugin.java`。
+- 一个**基本名（Base Name）**，这里是 `JavaPlugin`。
 
-包名通常都是像 `org.bukkit` 或者 `moe.skjsjhb.pd.util` 这样用英文单词和点分隔开的。有点像文件的路径，不过包名和文件夹路径不同，**包与包之间没有包含关系**，也就是说，`org.bukkit` 和 `org` 是平级，**`org.bukkit` 不是 `org` 中一个名为 `bukkit` 的包**。
+包名通常都是像 `org.bukkit.plugin.java` 或者 `moe.skjsjhb.pd.util` 这样用英文单词和点分隔开的。有点像文件的路径，不过包名和文件夹路径不同，**包与包之间没有包含关系**，也就是说，`org.bukkit` 和 `org` 是平级，**`org.bukkit` 不是 `org` 中一个名为 `bukkit` 的包**。
 
 *如果说文件夹是潜影盒的话，那么包就更像箱子，你无法将一个装有东西的箱子塞入另一个箱子里。*
 
@@ -191,10 +191,12 @@ org.bukkit.Bukkit.doThat()
 Kotlin 允许我们使用全名**导入（Import）** 一个对象，此后就可以在当前文件中使用它的基本名：
 
 ```kotlin
-import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
 
 // 稍后就可以这样做：
-Bukkit.getServer()
+class Main : JavaPlugin() {
+    // ...
+}
 ```
 
 导入对象的语法是 `import 全名`，而且必须放在文件开头。在此之后，程序的剩余部分就可以使用基本名来访问对象。
@@ -202,12 +204,11 @@ Bukkit.getServer()
 所以，第一个插件的代码，也完全可以写成这样：
 
 ```kotlin
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {
     override fun onEnable() {
-        Bukkit.getServer().shutdown()
+        server.shutdown()
     }
 }
 ```

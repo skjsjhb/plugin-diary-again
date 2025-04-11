@@ -60,7 +60,7 @@ class Main : org.bukkit.plugin.java.JavaPlugin() {
 下面就来添加一个真正有用的功能吧！我们来让服务器启动时自动关闭（笑）。向 `onEnable` 中添加如下代码：
 
 ```kotlin
-org.bukkit.Bukkit.getServer().shutdown()
+server.shutdown()
 ```
 
 最终的代码会变成这样：
@@ -68,7 +68,7 @@ org.bukkit.Bukkit.getServer().shutdown()
 ```kotlin
 class Main : org.bukkit.plugin.java.JavaPlugin() {
     override fun onEnable() {
-        org.bukkit.Bukkit.getServer().shutdown()
+        server.shutdown()
     }
 }
 ```
@@ -86,7 +86,7 @@ class Main : org.bukkit.plugin.java.JavaPlugin() {
 ```kotlin
 class Main : org.bukkit.plugin.java.JavaPlugin() {
     override fun onEnable() {
-org.bukkit.Bukkit.getServer().shutdown()
+server.shutdown()
     }
 }
 ```
@@ -97,10 +97,10 @@ org.bukkit.Bukkit.getServer().shutdown()
 
 这就 OK 了！构建插件，然后把它复制到 `plugins` 文件夹中，启动服务器，你会发现服务器在启动一小会后就会自动关闭，完全没办法正常运行。很不错吧？话说，明明是软件不能正常运行，大家还开心得不得了，真是一群奇怪的人（笑）。
 
-关闭服务器的核心代码就是 `org.bukkit.Bukkit.getServer().shutdown()`，语法什么的暂且放在一边，这行代码的含义就是：
+关闭服务器的核心代码就是 `server.shutdown()`，语法什么的暂且放在一边，这行代码的含义很好理解：
 
-- `org.bukkit.Bukkit.getServer()`：请求获得服务器控制权。
-- `.shutdown()`：获得服务器控制权后，就用它把服务器关掉。
+- `server` 就是指服务器。
+- `.shutdown()` 就是指关闭。
 
 如果用你熟悉的 Minecraft 命令来写，大概就是：
 
