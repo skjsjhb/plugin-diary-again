@@ -32,6 +32,11 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
+pre,
+code {
+  font-variant-ligatures: none;
+}
+
 [data-theme='dark'] article strong {
   color: #fab387;
 }
