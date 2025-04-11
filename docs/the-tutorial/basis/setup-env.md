@@ -216,7 +216,7 @@ Starting org.bukkit.craftbukkit.Main
 [21:17:56 INFO]: You need to agree to the EULA in order to run the server. Go to eula.txt for more info.
 ```
 
-现在回到服务端根目录中，Paper 在刚才的过程中创建了很多新文件，并找到一个名为 `eula.txt` 的文件，将其打开，你将看到以下内容：
+现在回到服务端根目录中，Paper 在刚才的过程中创建了很多新文件。找到一个名为 `eula.txt` 的文件，将其打开，你将看到以下内容：
 
 ```properties
 # By changing the setting below to TRUE you ...
