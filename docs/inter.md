@@ -26,7 +26,7 @@ sidebar_position: 1.5
 
 在整个 2011 年，Bukkit 取得了飞跃式的发展，插件社区许多奠基项目被陆续开发出来，包括至今仍在使用的 MultiVerse（多世界管理），现代服务器权限管理的前身 Permissions 等，即使在今天的许多插件中也能看到这些先驱者的身影。
 
-2011 年末，著名的 Forge 诞生了，与插件的目的不同，Forge 将工作重心放在了客户端和服务端的协调上，希望能让模组更容易地在多人游戏中运行。尽管继任 Forge 开发的 LexManos 是个[不折不扣的小人](https://neoforged.net/news/theproject/)，但不可否认，Forge 项目本身仍然是一个伟大的成果，在未来的十年内（直至 Minecraft 1.14 时 Fabric 的发布）都是模组社区毫无争议的代表。
+2011 年末，著名的 Forge 诞生了，与插件的目的不同，Forge 将工作重心放在了客户端和服务端的协调上，希望能让模组更容易地在多人游戏中运行。尽管继任 Forge 开发的 LexManos 是个 [不折不扣的小人](https://neoforged.net/news/theproject/)，但不可否认，Forge 项目本身仍然是一个伟大的成果，在未来的十年内（直至 Minecraft 1.14 时 Fabric 的发布）都是模组社区毫无争议的代表。
 
 ## 历史风云：Spigot、Paper 和 Sponge
 
