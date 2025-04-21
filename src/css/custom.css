@@ -41,6 +41,11 @@ code {
   font-variant-ligatures: none;
 }
 
+blockquote,
+div.alert {
+  margin-bottom: var(--ifm-leading);
+}
+
 [data-theme='dark'] article strong {
   color: #fab387;
 }
