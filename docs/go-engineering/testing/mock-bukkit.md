@@ -29,10 +29,10 @@ testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.45.1")
 添加了这行代码后，重新导入 Gradle 项目，然后修改 `MainTest.kt`：
 
 ```kotlin
-class MainTest {
-    private val server = MockBukkit.mock()  // 创建一个虚拟服务器
-    private val plugin = MockBukkit.loadSimple(Main::class.java)    // 加载插件
+val server = MockBukkit.mock()  // 创建一个虚拟服务器
+val plugin = MockBukkit.loadSimple(Main::class.java)    // 加载插件
 
+class MainTest {
     @Test
     fun testPlayerJoin() {
         // 要做的测试之事……
@@ -40,7 +40,7 @@ class MainTest {
 }
 ```
 
-`MockBukkit.mock` 方法创建一个**虚拟服务器**，我们将它作为一个属性，以便稍后在测试时使用。Gradle 在运行测试方法前总是会先构造测试类（即 `MainTest`）的对象，因此我们可以确保这行代码总是在测试之前执行。
+`MockBukkit.mock` 方法创建一个**虚拟服务器**，我们将它放在 `MainTest` 的外面，也就是文件顶层，以便稍后使用。这是因为测试类的执行比较特殊，如果将 MockBukkit 放在 `MainTest` 里而不妥善清理，测试就会出错。
 
 `MockBukkit.loadSimple` 方法**加载指定的插件**，我们将插件主类 `Main` 传递给它。这里 `::class.java` 是 Kotlin 用于获取类信息的记号，暂且记住这样的用法就好。在加载插件后，MockBukkit 会自动启用插件，即调用 `onEnable` 方法。
 
