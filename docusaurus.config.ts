@@ -164,6 +164,13 @@ const config: Config = {
       darkTheme: prismThemes.vsDark,
       additionalLanguages: ["bash", "java", "powershell", "log", "properties", "diff"]
     },
+    mermaid: {
+      options: {
+        gitGraph: {
+          parallelCommits: true
+        }
+      }
+    }
   } satisfies Preset.ThemeConfig,
 
   markdown: {
