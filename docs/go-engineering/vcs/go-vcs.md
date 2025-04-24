@@ -38,7 +38,9 @@ sidebar_position: 1
 
 我们可不想在接下来开发插件时把时间浪费在“删除新添加的代码”这种事情上，所以让我们来试试版本管理系统吧！不过，由于 Git 既不是 Java 的一部分，也不随 IDEA 发行，因此必须另行安装它。
 
-你可以从 [Git 的官方网站](https://git-scm.com/downloads) 下载安装程序。Git 的安装过程非常简单，只需要使用默认选项，一路点按 <kbd>Next</kbd> 按钮就 OK 了。
+你可以从 [Git 的官方网站](https://git-scm.com/downloads) 下载安装程序。如果这个网站无法访问或者下载较慢，那也可以从 [这个镜像](https://mirrors.ustc.edu.cn/github-release/git-for-windows/git/LatestRelease/) 下载 Windows 版本的安装程序。在镜像站下载文件时，请一定要选择形如 `Git-x.x.x-64-bit.exe` 这样的文件。
+
+Git 的安装过程非常简单，只需要使用默认选项，一路点按 <kbd>Next</kbd> 按钮就 OK 了。
 
 在安装完成后，打开一个**新的终端**，并在其中键入如下命令：
 
@@ -51,6 +53,8 @@ git -v
 ```
 git version 2.49.0.windows.1
 ```
+
+*当你读到这里时，Git 可能已经有了新的版本，所以即使输出的内容不完全一致也不必担心。与 Java 不同，Git 的版本不影响其主要功能的使用。*
 
 ## 在 IDEA 中使用 Git
 
