@@ -32,6 +32,18 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
+article ul,
+article ol {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+p+ul,
+p+ol {
+  margin-top: 0 !important;
+  margin-bottom: 2rem !important;
+}
+
 [data-theme='dark'] .alert--secondary {
   --ifm-alert-background-color: #333;
 }
