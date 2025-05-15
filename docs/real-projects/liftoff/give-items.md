@@ -190,6 +190,7 @@ server.getPluginCommand("kitmod")?.setExecutor { sender, command, label, args ->
     if (sender is Player) {
         if (sender.isOp) {
             val inv = KitModInventoryHolder()
+            inv.inventory.storageContents = kitItems.toTypedArray() // 将物品恢复到物品栏中
             sender.openInventory(inv.inventory)
         } else {
             sender.sendMessage(Component.text("Permission denied."))
@@ -199,6 +200,8 @@ server.getPluginCommand("kitmod")?.setExecutor { sender, command, label, args ->
     true
 }
 ```
+
+和旅行背包插件一样，一开始创建的物品栏是空的，我们需要把初始套装的内容写入其中才能让玩家看到。
 
 我们使用原版游戏的权限系统，仅允许管理员拥有修改套装内容的特权。有过服务器运营经验的读者可能会觉得“不是应该有 `kit.mod` 这样的权限吗？”，的确，仅仅区分管理员和普通玩家，在许多情况下是不够方便的，不过这些涉及权限管理的内容，还是让我们留到专门的章节中吧。
 
