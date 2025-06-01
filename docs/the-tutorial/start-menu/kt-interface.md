@@ -119,7 +119,7 @@ val z = Zombie()    // 可以运行，因为 Zombie 不是抽象类
 <details>
 <summary>你是职业选手吗？</summary>
 
-与 Java 不同，Kotlin 中的接口可以正常定义和使用非抽象方法。
+与 Java（8及以前）不同，Kotlin 中的接口可以正常定义和使用非抽象方法。
 
 </details>
 
