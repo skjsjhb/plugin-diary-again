@@ -6,6 +6,12 @@ sidebar_position: 3
 
 上一节中介绍了 `plugin.yml`，那算是插件的“简历”。但是光有简历可不够，一个插件要能够做些有意义的事情，就必须有点“真才实学” —— 有可执行的代码才行！YAML 不过是用于表示数据（确切说是一张或多张表）的形式之一，它能描述“是什么”，却不能够描述“做什么”。能做到后者的，正是我们的 Kotlin，这些代码是真正在服务器上执行的代码。
 
+:::tip 消除压力
+
+这一节会使用到一些 Kotlin 语言知识，所以可能看上去比较难懂。不过，你并不需要现在就打开搜索引擎查找“Kotlin 从入门到放弃”之类的内容（笑）。实际上，即使完全无法理解这些代码也不要紧，只需要跟着复制粘贴代码就好。在下一章中我们会详细地介绍 Kotlin 代码的写法。
+
+:::
+
 ## 开始了。
 
 打开 `src/main/kotlin/Main.kt`，这是项目中目前唯一的代码文件。
@@ -36,8 +42,6 @@ class Main : org.bukkit.plugin.java.JavaPlugin() {
 只是复制粘贴别人的东西可没什么意思！所以我们现在来添加点代码，将 `Main.kt` 修改成这样：
 
 ```kotlin
-import org.bukkit.Bukkit
-
 class Main : org.bukkit.plugin.java.JavaPlugin() {
     override fun onEnable() {
         // 要做之事

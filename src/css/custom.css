@@ -37,7 +37,7 @@
 }
 
 article ul,
-article ol {
+article ol { 
   margin-top: 1rem !important;
   margin-bottom: 1rem !important;
 }
@@ -58,8 +58,9 @@ code {
 }
 
 blockquote,
-div.alert {
-  margin-bottom: var(--ifm-leading);
+div.alert,
+details {
+  margin-bottom: var(--ifm-leading) !important;
 }
 
 [data-theme='dark'] article strong {
@@ -120,11 +121,11 @@ article hr {
 }
 
 [data-theme='dark'] code {
-  color: #89ecf3;
+  color: #53fac3;
 }
 
 [data-theme='light'] code {
-  color: #0096a0;
+  color: #119669;
 }
 
 pre {
