@@ -61,7 +61,7 @@ const config: Config = {
                   light: "catppuccin-latte",
                   dark: "catppuccin-mocha"
                 },
-                langs: ["bash", "powershell", "java", "kotlin", "yaml", "toml", "json", "properties", "log", "c"],
+                langs: ["bash", "powershell", "java", "kotlin", "yaml", "toml", "json", "properties", "log", "c", "sql"],
                 // alternatively, you can activate all bundled languages:
                 // langs: Object.keys(bundledLanguages) as BundledLanguage[]
               } satisfies RehypeShikiOptions,
