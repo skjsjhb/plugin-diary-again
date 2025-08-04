@@ -5,7 +5,9 @@ export default function replaceQuotes() {
     return function (tree) {
         findAndReplace(tree, [
             ["“", "『"],
-            ["”", "』"]
+            ["”", "』"],
+             ["‘", "「"],
+            ["’", "」"]
         ]);
     }
 }
